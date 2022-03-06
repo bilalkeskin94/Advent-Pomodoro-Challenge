@@ -7,21 +7,23 @@ const ring = document.querySelector('.ring');
 const audio = new Audio(
 	'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3'
 );
-let minutes = parseInt(minute.value);
-let seconds = parseInt(second.value);
-let totalSeconds = minutes * 60 + seconds;
-let currentSeconds = totalSeconds;
 
 const pomodoroTimer = () => {
+	let minutes = parseInt(minute.value);
+	let seconds = parseInt(second.value);
+	let totalSeconds = minutes * 60 + seconds;
+	let currentSeconds = totalSeconds;
 	let interval = setInterval(() => {
 		stop.addEventListener('click', () => {
 			clearInterval(interval);
+			settings.removeAttribute('disabled');
 			start.classList.remove('hidden');
 			stop.classList.add('hidden');
-            audio.play();
+			audio.play();
 		});
 		if (currentSeconds === 0) {
 			clearInterval(interval);
+			alert('Time is up!');
 			ring.style.stroke = 'red';
 			return;
 		}
@@ -44,11 +46,24 @@ const startPomodoro = () => {
 		pomodoroTimer();
 		start.classList.add('hidden');
 		stop.classList.remove('hidden');
+		minute.setAttribute('disabled', true);
+		second.setAttribute('disabled', true);
+		settings.setAttribute('disabled', true);
+	});
+};
+
+const editPomodoro = () => {
+	settings.addEventListener('click', () => {
+		minute.toggleAttribute('disabled');
+		second.toggleAttribute('disabled');
+		let minutes = parseInt(minute.value);
+		let seconds = parseInt(second.value);
 	});
 };
 
 const pomodoro = () => {
 	startPomodoro();
+	editPomodoro();
 };
 
 pomodoro();
